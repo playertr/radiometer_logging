@@ -31,7 +31,25 @@ Const SL610_Thermistor_SE_Chan = 4 'Single-ended thermistor channel
 Const SL610_Thermistor_EXC = 1 'Thermistor excitation channel
 'Also connect analog ground, shield/ground, and 12V heater
 
-' ############# Implementation ##############################################
+'SP-510 (upward-facing pyranometer) ----------------------------------------
+
+'Calibration coefficient from Apogee calibration certificate
+Const SP510_CF = 19.00 'sensor specific (see calibration certificate)
+
+'Wiring locations
+Const SP510_SE_Chan = 7 'Single-ended channel
+'Also connect shield and negative signal to ground
+
+'SP-610 (downward-facing pyranometer) ----------------------------------------
+
+'Calibration coefficient from Apogee calibration certificate
+Const SP610_CF = 7.00 'sensor specific (see calibration certificate)
+
+'Wiring locations
+Const SP610_SE_Chan = 8 'Single-ended channel
+'Also connect shield and negative signal to ground
+
+'############# Implementation ##############################################
 'Explanation of Constants and Variables Used in Datalogger Program
 'BattV = datalogger battery voltage
 'PanelT = datalogger panel temperature
@@ -52,6 +70,9 @@ Public SL610_mV
 Public SL610_SBTemp_C
 Public SL610_LWo
 Public SL610_Rt, SL610_ST_Rat 'TODO change to Dim
+
+Public SP510_SWi
+Public SP610_SWo
 
 'Stefan-Boltzmann constant
 Const Sigma = 0.000000056704
@@ -74,6 +95,14 @@ DataTable (Longwave,1,-1)
 	Sample(1,PanelT,IEEE4)
   Average(1,SL510_LWi,IEEE4,False)
   Average(1,SL610_LWo,IEEE4,False)
+EndTable
+
+DataTable (Solar,1,-1)
+	DataInterval (0,1,Min,10)
+	Minimum(1,BattV,IEEE4,0,False)
+	Sample(1,PanelT,IEEE4)
+	Average(1,SP510_SWi,IEEE4,False)
+	Average (1,SP610_SWo,IEEE4,False)
 EndTable
 
 'Main Program
@@ -118,7 +147,18 @@ BeginProg
       'Calculate emitted longwave radiation in units of W m-2
       SL610_LWo = SL610_k1 * SL610_mV + SL610_k2 * Sigma * (SL610_SBTemp_C + 273.15) ^ 4
 
+    'SP-510 upward-facing pyranometer -----------------------------------------
+    'Measure incoming global shortwave radiation (SP510_SWi) on a differential channel 
+    '(can also be measured on a single-ended channel)
+     VoltSe(SP510_SWi,1,mV250,SP510_SE_Chan,True,0,_60Hz,SP510_CF,0)
+
+    'SP-510 upward-facing pyranometer -----------------------------------------
+    'Measurereflected shortwave radiation (SP610_SWo) on a differential channel 
+    '(can also be measured on a single-ended channel)
+     VoltSe(SP610_SWo,1,mV250,SP610_SE_Chan,True,0,_60Hz,SP610_CF,0)
+
     'Call Output Tables
 		CallTable Longwave
+    CallTable Solar
 	NextScan
 EndProg
