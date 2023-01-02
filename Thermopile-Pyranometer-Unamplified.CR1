@@ -1,0 +1,45 @@
+'CR1000 Series Datalogger
+'Example datalogger program for Apogee Instruments SP-510 and SP-610 thermopile pyranometers
+'Date: October 20, 2016
+'Program author: Jacob Bingham
+
+'Explanation of Constants and Variables Used in Datalogger Program
+'BattV = datalogger battery voltage
+'PanelT = datalogger panel temperature
+'SP510_SWi = incoming global shortwave radiation in W m-2 (watts per square meter)
+'SP610_SWo = outgoing (reflected) shortwave radiation in W m-2
+'SP510_CF = calibration factor to convert mV signal from SP-510 to units of W m-2
+'SP610_CF = calibration factor to convert mV signal from SP-610 to units of W m-2
+
+'Declare Public Variables
+Public BattV, PanelT
+Public SP510_SWi
+Public SP610_SWo
+
+Const SP510_CF = 19.00 'sensor specific (see calibration certificate)
+Const SP610_CF = 7.00 ' sensor specific (see calibration certificate)
+
+'Define Data Tables
+DataTable (Solar,1,-1)
+	DataInterval (0,1,Min,10)
+	Minimum(1,BattV,IEEE4,0,False)
+	Sample(1,PanelT,IEEE4)
+	Average(1,SP510_SWi,IEEE4,False)
+	Average (1,SP610_SWo,IEEE4,False)
+EndTable
+
+'Main Program
+BeginProg
+	Scan(1,Sec,0,0)
+		Battery(BattV)
+		PanelTemp(PanelT,_60Hz)
+		
+    'Measure incoming global shortwave radiation (SP510_SWi) and reflected shortwave radiation (SP610_SWo)
+    'on a differential channel (can also be measured on a single-ended channel)
+     VoltDiff(SP510_SWi,1,mV250,1,True,0,_60Hz,SP510_CF,0)
+     VoltDiff(SP610_SWo,1,mV250,2,True,0,_60Hz,SP610_CF,0)
+
+    'Call Output Tables
+		CallTable Solar
+	NextScan
+EndProg

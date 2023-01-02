@@ -1,0 +1,71 @@
+'CR1000 Series Datalogger
+'Example datalogger program for Apogee Instruments SL-510 and SL-610 thermopile pyrgeometers
+'Date: October 20, 2016
+'Program author: Jacob Bingham
+
+'Explanation of Constants and Variables Used in Datalogger Program
+'BattV = datalogger battery voltage
+'PanelT = datalogger panel temperature
+'Pyrg_mV = voltage signal from pyrgeometer detector
+'Pyrg_SBTemp_C = calculated sensor body temperature in degrees Celcius
+'Rt = resistance of thermistor for measuring sensor body temperature
+'ST_Rat = ratio of measured voltage to excitation voltage from half bridge measurement
+'Pyrg_LWi = emitted longwave radiation in W m-2 (watts per square meter)
+
+'Declare public variables
+Public BattV, PanelT
+Public Pyrg_mV
+Public Pyrg_SBTemp_C
+Public Rt, ST_Rat
+Public Pyrg_LWi
+
+'Apogee Pyrgeometer Thermistor Coefficients
+Const A_Below0 = 0.000932960
+Const B_Below0 = 0.000221424
+Const C_Below0 = 0.000000126329
+Const A_Above0 = 0.000932794
+Const B_Above0 = 0.000221451
+Const C_Above0 = 0.000000126233
+
+'Stefan-Boltzmann constant
+Const Sigma = 0.000000056704
+
+'Sensor specific calibration coefficients
+Const Pyrg_k1 = 9.000 'see calibration certificate
+Const Pyrg_k2 = 1.000 'see calibration certificate
+
+'Define Data Tables
+DataTable (Longwave,1,-1)
+	DataInterval (0,1,Min,10)
+	Minimum(1,BattV,IEEE4,0,False)
+	Sample(1,PanelT,IEEE4)
+  Average(1,Pyrg_LWi,IEEE4,False)
+EndTable
+
+'Main Program
+BeginProg
+	Scan(1,Sec,0,0)
+		Battery(BattV)
+		PanelTemp(PanelT,_60Hz)
+		
+      'Measure incoming longwave radiation on a differential channel
+      VoltDiff (Pyrg_mV,1,AutoRange,1,True,0,_60Hz,1.0,0)
+      'Measure sensor body temperature using half bridge measurement
+      BrHalf (ST_Rat,1,mV2500,3,Vx1,1,2500,True,0,_60Hz,1,0)
+      'Calculate resistance of pyrgeometer thermistor
+      Rt = 24900 * (ST_Rat / (1 - ST_Rat))
+      
+      'Use appropriate thermistor coefficients depending on calculated resistance
+      If Rt > 94980 Then 'Resistance value at 0 C
+      Pyrg_SBTemp_C = (1 / (A_Below0 + (B_Below0 * LN(Rt)) + (C_Below0 * (LN(Rt))^3))) - 273.15
+			Else
+		  Pyrg_SBTemp_C = (1 / (A_Above0 + (B_Above0 * LN(Rt)) + (C_Above0 * (LN(Rt))^3))) - 273.15
+			EndIf
+      
+      'Calculate emitted longwave radiation in units of W m-2
+      Pyrg_LWi = Pyrg_k1 * Pyrg_mV + Pyrg_k2 * Sigma * (Pyrg_SBTemp_C + 273.15) ^ 4
+
+    'Call Output Tables
+		CallTable Longwave
+	NextScan
+EndProg
