@@ -8,10 +8,11 @@
 'Edit these whenever changing instruments or wiring locations
 
 'SL-510 (upward-facing pyrgeometer) ----------------------------------------
+'Serial Number SL-510-SS_1314
 
 'Thermopile coefficients from Apogee calibration certificate
-Const SL510_k1 = 9.000
-Const SL510_k2 = 1.000
+Const SL510_k1 = 9.707
+Const SL510_k2 = 1.052
 
 'Wiring locations
 Const SL510_Thermopile_DF_Chan = 1 'Differential channel
@@ -20,10 +21,11 @@ Const SL510_Thermistor_EXC = 1 'Thermistor excitation channel
 'Also connect analog ground, shield/ground, and 12V heater
 
 'SL-610 (downward-facing pyrgeometer) ----------------------------------------
+'Serial Number SL-610-SS_1338
 
 'Thermopile coefficients from Apogee calibration certificate
-Const SL610_k1 = 9.000
-Const SL610_k2 = 1.000
+Const SL610_k1 = 9.839
+Const SL610_k2 = 1.063
 
 'Wiring locations
 Const SL610_Thermopile_DF_Chan = 3 'Differential channel
@@ -32,18 +34,20 @@ Const SL610_Thermistor_EXC = 1 'Thermistor excitation channel
 'Also connect analog ground, shield/ground, and 12V heater
 
 'SP-510 (upward-facing pyranometer) ----------------------------------------
+'Srial Number SP-510-SS_2985
 
 'Calibration coefficient from Apogee calibration certificate
-Const SP510_CF = 19.00 'sensor specific (see calibration certificate)
+Const SP510_CF = 23.24 'sensor specific (see calibration certificate)
 
 'Wiring locations
 Const SP510_SE_Chan = 7 'Single-ended channel
 'Also connect shield and negative signal to ground
 
 'SP-610 (downward-facing pyranometer) ----------------------------------------
+'Serial Number SP-610-SS_1479
 
 'Calibration coefficient from Apogee calibration certificate
-Const SP610_CF = 7.00 'sensor specific (see calibration certificate)
+Const SP610_CF = 30.55 'sensor specific (see calibration certificate)
 
 'Wiring locations
 Const SP610_SE_Chan = 8 'Single-ended channel
