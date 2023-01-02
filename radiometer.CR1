@@ -4,6 +4,34 @@
 'Date: January 2, 2022
 'Program author: Jacob Bingham, Tim Player
 
+'Constants for calibration coefficients and wiring locations
+'Edit these whenever changing instruments or wiring locations
+
+'SL-510 (upward-facing pyrgeometer) ----------------------------------------
+
+'Thermopile coefficients from Apogee calibration certificate
+Const SL510_k1 = 9.000
+Const SL510_k2 = 1.000
+
+'Wiring locations
+Const SL510_Thermopile_DF_Chan = 1 'Differential channel
+Const SL510_Thermistor_SE_Chan = 3 'Single-ended thermistor channel
+Const SL510_Thermistor_EXC = 1 'Thermistor excitation channel
+'Also connect analog ground, shield/ground, and 12V heater
+
+'SL-610 (downward-facing pyrgeometer) ----------------------------------------
+
+'Thermopile coefficients from Apogee calibration certificate
+Const SL610_k1 = 9.000
+Const SL610_k2 = 1.000
+
+'Wiring locations
+Const SL610_Thermopile_DF_Chan = 3 'Differential channel
+Const SL610_Thermistor_SE_Chan = 4 'Single-ended thermistor channel
+Const SL610_Thermistor_EXC = 1 'Thermistor excitation channel
+'Also connect analog ground, shield/ground, and 12V heater
+
+' ############# Implementation ##############################################
 'Explanation of Constants and Variables Used in Datalogger Program
 'BattV = datalogger battery voltage
 'PanelT = datalogger panel temperature
@@ -13,20 +41,23 @@
 'ST_Rat = ratio of measured voltage to excitation voltage from half bridge measurement
 'Pyrg_LWi = emitted longwave radiation in W m-2 (watts per square meter)
 
-'Declare wiring locations For upward-facing pyrgeometer
-Const SL510_Thermopile_DF_Chan = 1 'Differential channel
-Const SL510_Thermistor_SE_Chan = 3 'Single-ended thermistor channel
-Const SL510_Thermistor_EXC = 1 'Thermistor excitation channel
-'Also connect analog ground, shield/ground, and 12V heater
-
 'Declare public variables
 Public BattV, PanelT
-Public Pyrg_mV
-Public Pyrg_SBTemp_C
-Public Rt, ST_Rat
-Public Pyrg_LWi
+Public SL510_mV
+Public SL510_SBTemp_C
+Public SL510_LWi
+Public SL510_Rt, SL510_ST_Rat 'TODO change to Dim
 
-'Apogee Pyrgeometer Thermistor Coefficients
+Public SL610_mV
+Public SL610_SBTemp_C
+Public SL610_LWo
+Public SL610_Rt, SL610_ST_Rat 'TODO change to Dim
+
+'Stefan-Boltzmann constant
+Const Sigma = 0.000000056704
+
+'Thermistor coefficients from Apogee manual
+'https://www.apogeeinstruments.com/content/SL-510-610-manual.pdf
 Const A_Below0 = 0.000932960
 Const B_Below0 = 0.000221424
 Const C_Below0 = 0.000000126329
@@ -34,19 +65,15 @@ Const A_Above0 = 0.000932794
 Const B_Above0 = 0.000221451
 Const C_Above0 = 0.000000126233
 
-'Stefan-Boltzmann constant
-Const Sigma = 0.000000056704
-
-'Sensor specific calibration coefficients
-Const Pyrg_k1 = 9.000 'see calibration certificate
-Const Pyrg_k2 = 1.000 'see calibration certificate
+Const Pyrg_HBridge_R = 24900 'Resistance of thermistor h-bridge resistor
 
 'Define Data Tables
 DataTable (Longwave,1,-1)
 	DataInterval (0,1,Min,10)
 	Minimum(1,BattV,IEEE4,0,False)
 	Sample(1,PanelT,IEEE4)
-  Average(1,Pyrg_LWi,IEEE4,False)
+  Average(1,SL510_LWi,IEEE4,False)
+  Average(1,SL610_LWo,IEEE4,False)
 EndTable
 
 'Main Program
@@ -55,22 +82,41 @@ BeginProg
 		Battery(BattV)
 		PanelTemp(PanelT,_60Hz)
 		
+      'SL-510 upward-facing pyrgeometer ------------------------------------
       'Measure incoming longwave radiation on a differential channel
-      VoltDiff (Pyrg_mV,1,AutoRange,SL510_Thermopile_DF_Chan,True,0,_60Hz,1.0,0)
+      VoltDiff (SL510_mV,1,AutoRange,SL510_Thermopile_DF_Chan,True,0,_60Hz,1.0,0)
       'Measure sensor body temperature using half bridge measurement
-      BrHalf (ST_Rat,1,mV2500,SL510_Thermistor_SE_Chan,SL510_Thermistor_EXC,1,2500,True,0,_60Hz,1,0)
+      BrHalf (SL510_ST_Rat,1,mV2500,SL510_Thermistor_SE_Chan,SL510_Thermistor_EXC,1,2500,True,0,_60Hz,1,0)
       'Calculate resistance of pyrgeometer thermistor
-      Rt = 24900 * (ST_Rat / (1 - ST_Rat))
+      SL510_Rt = Pyrg_HBridge_R * (SL510_ST_Rat / (1 - SL510_ST_Rat))
       
       'Use appropriate thermistor coefficients depending on calculated resistance
-      If Rt > 94980 Then 'Resistance value at 0 C
-      Pyrg_SBTemp_C = (1 / (A_Below0 + (B_Below0 * LN(Rt)) + (C_Below0 * (LN(Rt))^3))) - 273.15
+      If SL510_Rt > 94980 Then 'Resistance value at 0 C
+      SL510_SBTemp_C = (1 / (A_Below0 + (B_Below0 * LN(SL510_Rt)) + (C_Below0 * (LN(SL510_Rt))^3))) - 273.15
 			Else
-		  Pyrg_SBTemp_C = (1 / (A_Above0 + (B_Above0 * LN(Rt)) + (C_Above0 * (LN(Rt))^3))) - 273.15
+		  SL510_SBTemp_C = (1 / (A_Above0 + (B_Above0 * LN(SL510_Rt)) + (C_Above0 * (LN(SL510_Rt))^3))) - 273.15
 			EndIf
       
       'Calculate emitted longwave radiation in units of W m-2
-      Pyrg_LWi = Pyrg_k1 * Pyrg_mV + Pyrg_k2 * Sigma * (Pyrg_SBTemp_C + 273.15) ^ 4
+      SL510_LWi = SL510_k1 * SL510_mV + SL510_k2 * Sigma * (SL510_SBTemp_C + 273.15) ^ 4
+      
+      'SL-610 downward-facing pyrgeometer ------------------------------------
+      'Measure incoming longwave radiation on a differential channel
+      VoltDiff (SL610_mV,1,AutoRange,SL610_Thermopile_DF_Chan,True,0,_60Hz,1.0,0)
+      'Measure sensor body temperature using half bridge measurement
+      BrHalf (SL610_ST_Rat,1,mV2500,SL610_Thermistor_SE_Chan,SL610_Thermistor_EXC,1,2500,True,0,_60Hz,1,0)
+      'Calculate resistance of pyrgeometer thermistor
+      SL610_Rt = Pyrg_HBridge_R * (SL610_ST_Rat / (1 - SL610_ST_Rat))
+      
+      'Use appropriate thermistor coefficients depending on calculated resistance
+      If SL610_Rt > 94980 Then 'Resistance value at 0 C
+      SL610_SBTemp_C = (1 / (A_Below0 + (B_Below0 * LN(SL610_Rt)) + (C_Below0 * (LN(SL610_Rt))^3))) - 273.15
+			Else
+		  SL610_SBTemp_C = (1 / (A_Above0 + (B_Above0 * LN(SL610_Rt)) + (C_Above0 * (LN(SL610_Rt))^3))) - 273.15
+			EndIf
+      
+      'Calculate emitted longwave radiation in units of W m-2
+      SL610_LWo = SL610_k1 * SL610_mV + SL610_k2 * Sigma * (SL610_SBTemp_C + 273.15) ^ 4
 
     'Call Output Tables
 		CallTable Longwave
