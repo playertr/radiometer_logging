@@ -154,24 +154,18 @@ Const C_Above0 = 0.000000126233
 Const Pyrg_HBridge_R = 24900 'Resistance of thermistor h-bridge resistor
 
 'Define Data Tables
-DataTable (Longwave,1,-1)
+DataTable (Radiation,1,-1)
 	DataInterval (0,1,Min,10)
 	Minimum(1,BattV,IEEE4,0,False)
 	Sample(1,PanelT,IEEE4)
-  Average(1,A_SL510_LWi,IEEE4,False)
-  Average(1,A_SL610_LWo,IEEE4,False)
-  Average(1,B_SL510_LWi,IEEE4,False)
-  Average(1,B_SL610_LWo,IEEE4,False)
-EndTable
-
-DataTable (Solar,1,-1)
-	DataInterval (0,1,Min,10)
-	Minimum(1,BattV,IEEE4,0,False)
-	Sample(1,PanelT,IEEE4)
-	Average(1,A_SP510_SWi,IEEE4,False)
-	Average (1,A_SP610_SWo,IEEE4,False)
+    Average(1,A_SL510_LWi,IEEE4,False)
+    Average(1,A_SL610_LWo,IEEE4,False)
+    Average(1,B_SL510_LWi,IEEE4,False)
+    Average(1,B_SL610_LWo,IEEE4,False)
+    Average(1,A_SP510_SWi,IEEE4,False)
+    Average (1,A_SP610_SWo,IEEE4,False)
     Average(1,B_SP510_SWi,IEEE4,False)
-	Average (1,B_SP610_SWo,IEEE4,False)
+    Average (1,B_SP610_SWo,IEEE4,False)
 EndTable
 
 'Main Program
@@ -275,7 +269,6 @@ BeginProg
     VoltSe(B_SP610_SWo,1,mV250,B_SP610_SE_Chan,True,0,_60Hz,B_SP610_CF,0)
 
     'Call Output Tables
-		CallTable Longwave
-    CallTable Solar
+	CallTable Radiation
 	NextScan
 EndProg
