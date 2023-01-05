@@ -1,3 +1,5 @@
 *_str.CR1
 *.tdf
 *.csv
+*.swp
+*.pyc
