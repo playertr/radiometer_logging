@@ -1,8 +1,10 @@
-'CR1000 Series Datalogger
-'Datalogger program to simultaneously read SL-510, SL-610, SP-510, and SP-610 from a single datalogger.
+'Radiometer Station "Shackleton"
+'Datalogger program to simultaneously read two sets of SL-510, SL-610, SP-510, and SP-610 from a single datalogger.
 'Based on example programs from Apogee.
 'Date: January 2, 2023
 'Program author: Jacob Bingham, Tim Player
+
+Public Station_Name = "Shackleton"
 
 'Constants for calibration coefficients and wiring locations
 'Edit these whenever changing instruments or wiring locations
