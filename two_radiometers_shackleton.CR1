@@ -115,28 +115,28 @@ Const B_SP610_SE_Chan = 16 'Single-ended channel
 
 'Declare public variables
 Public BattV, PanelT
-Public A_SL510_mV
+Dim A_SL510_mV
 Public A_SL510_SBTemp_C
 Public A_SL510_LWi
-Public A_SL510_Rt, A_SL510_ST_Rat 'TODO change to Dim
+Dim A_SL510_Rt, A_SL510_ST_Rat
 
-Public A_SL610_mV
+Dim A_SL610_mV
 Public A_SL610_SBTemp_C
 Public A_SL610_LWo
-Public A_SL610_Rt, A_SL610_ST_Rat 'TODO change to Dim
+Dim A_SL610_Rt, A_SL610_ST_Rat
 
 Public A_SP510_SWi
 Public A_SP610_SWo
 
-Public B_SL510_mV
+Dim B_SL510_mV
 Public B_SL510_SBTemp_C
 Public B_SL510_LWi
-Public B_SL510_Rt, B_SL510_ST_Rat 'TODO change to Dim
+Dim B_SL510_Rt, B_SL510_ST_Rat
 
-Public B_SL610_mV
+Dim B_SL610_mV
 Public B_SL610_SBTemp_C
 Public B_SL610_LWo
-Public B_SL610_Rt, B_SL610_ST_Rat 'TODO change to Dim
+Dim B_SL610_Rt, B_SL610_ST_Rat
 
 Public B_SP510_SWi
 Public B_SP610_SWo
