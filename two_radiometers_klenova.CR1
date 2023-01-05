@@ -11,11 +11,11 @@ Public Station_Name = "Klenova"
 
 'Radiometer A ##############################################################
 'SL-510 (upward-facing pyrgeometer) ----------------------------------------
-'Serial Number SL-510-SS_1314
+'Serial Number SL-510_1279
 
 'Thermopile coefficients from Apogee calibration certificate
-Const A_SL510_k1 = 9.707
-Const A_SL510_k2 = 1.052
+Const A_SL510_k1 = 9.539
+Const A_SL510_k2 = 1.046
 
 'Wiring locations
 Const A_SL510_Thermopile_DF_Chan = 1 'Differential channel
@@ -24,11 +24,11 @@ Const A_SL510_Thermistor_EXC = 1 'Thermistor excitation channel
 'Also connect analog ground, shield/ground, and 12V heater
 
 'SL-610 (downward-facing pyrgeometer) ----------------------------------------
-'Serial Number SL-610-SS_1338
+'Serial Number SL-610-1322
 
 'Thermopile coefficients from Apogee calibration certificate
-Const A_SL610_k1 = 9.839
-Const A_SL610_k2 = 1.063
+Const A_SL610_k1 = 9.704
+Const A_SL610_k2 = 1.035
 
 'Wiring locations
 Const A_SL610_Thermopile_DF_Chan = 3 'Differential channel
@@ -37,20 +37,20 @@ Const A_SL610_Thermistor_EXC = 1 'Thermistor excitation channel
 'Also connect analog ground, shield/ground, and 12V heater
 
 'SP-510 (upward-facing pyranometer) ----------------------------------------
-'Serial Number SP-510-SS_2985
+'Serial Number SP-510-SS_2847
 
 'Calibration coefficient from Apogee calibration certificate
-Const A_SP510_CF = 23.24 'sensor specific (see calibration certificate)
+Const A_SP510_CF = 22.97 'sensor specific (see calibration certificate)
 
 'Wiring locations
 Const A_SP510_SE_Chan = 7 'Single-ended channel
 'Also connect shield and negative signal to ground
 
 'SP-610 (downward-facing pyranometer) ----------------------------------------
-'Serial Number SP-610-SS_1479
+'Serial Number SP-610-SS_1426
 
 'Calibration coefficient from Apogee calibration certificate
-Const A_SP610_CF = 30.55 'sensor specific (see calibration certificate)
+Const A_SP610_CF = 24.49 'sensor specific (see calibration certificate)
 
 'Wiring locations
 Const A_SP610_SE_Chan = 8 'Single-ended channel
@@ -58,11 +58,11 @@ Const A_SP610_SE_Chan = 8 'Single-ended channel
 
 'Radiometer B ##############################################################
 'SL-510 (upward-facing pyrgeometer) ----------------------------------------
-'Serial Number SL-510-SS_1320
+'Serial Number SL-510_1278
 
 'Thermopile coefficients from Apogee calibration certificate
-Const B_SL510_k1 = 9.680
-Const B_SL510_k2 = 1.034
+Const B_SL510_k1 = 9.443
+Const B_SL510_k2 = 1.042
 
 'Wiring locations
 Const B_SL510_Thermopile_DF_Chan = 5 'Differential channel
@@ -71,11 +71,11 @@ Const B_SL510_Thermistor_EXC = 2 'Thermistor excitation channel
 'Also connect analog ground, shield/ground, and 12 heater
 
 'SL-610 (downward-facing pyrgeometer) ----------------------------------------
-'Serial Number SL-610-SS_1337
+'Serial Number SL-610-SS_1321
 
 'Thermopile coefficients from Apogee calibration certificate
-Const B_SL610_k1 = 9.737
-Const B_SL610_k2 = 1.047
+Const B_SL610_k1 = 9.496
+Const B_SL610_k2 = 1.016
 
 'Wiring locations
 Const B_SL610_Thermopile_DF_Chan = 7 'Differential channel
@@ -84,20 +84,20 @@ Const B_SL610_Thermistor_EXC = 2 'Thermistor excitation channel
 'Also connect analog ground, shield/ground, and 12V heater
 
 'SP-510 (upward-facing pyranometer) ----------------------------------------
-'Serial Number SP-510-SS_2986
+'Serial Number SP-510-SS_2846
 
 'Calibration coefficient from Apogee calibration certificate
-Const B_SP510_CF = 22.81 'sensor specific (see calibration certificate)
+Const B_SP510_CF = 23.72 'sensor specific (see calibration certificate)
 
 'Wiring locations
 Const B_SP510_SE_Chan = 15 'Single-ended channel
 'Also connect shield and negative signal to ground
 
 'SP-610 (downward-facing pyranometer) ----------------------------------------
-'Serial Number SP-610-SS_1478
+'Serial Number SP-610-SS_1425
 
 'Calibration coefficient from Apogee calibration certificate
-Const B_SP610_CF = 30.56 'sensor specific (see calibration certificate)
+Const B_SP610_CF = 24.98 'sensor specific (see calibration certificate)
 
 'Wiring locations
 Const B_SP610_SE_Chan = 16 'Single-ended channel
