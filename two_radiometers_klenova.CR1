@@ -4,8 +4,6 @@
 'Date: January 2, 2023
 'Program author: Jacob Bingham, Tim Player
 
-Public Station_Name = "Klenova"
-
 'Constants for calibration coefficients and wiring locations
 'Edit these whenever changing instruments or wiring locations
 
