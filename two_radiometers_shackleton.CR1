@@ -157,7 +157,7 @@ Const Pyrg_HBridge_R = 24900 'Resistance of thermistor h-bridge resistor
 
 'Define Data Tables
 DataTable (Radiation,1,-1)
-	DataInterval (0,1,Min,10) 'TODO: change from Min to Hour
+	DataInterval (0,10,Min,10) 'TODO: change from Min to Hour
 	Minimum(1,BattV,IEEE4,0,False)
 	Sample(1,PanelT,IEEE4)
     Average(1,A_SL510_LWi,IEEE4,False)
