@@ -6,6 +6,11 @@
 import ntplib
 import datetime as dt
 from cr1000utils import connect_to_device
+import argparse
+
+# Add parser object for command line arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("--port", type=str, default="/dev/ttyUSB0", help="Port to connect to like /dev/ttyUSB0")
 
 """Query the datetime from an NTP server"""
 def get_time_ntp() -> dt.datetime:
@@ -22,20 +27,25 @@ def get_time_local() -> dt.datetime:
 def as_utc_str(time: dt.datetime) -> str:
     return time.replace(tzinfo=dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
-print("Connecting to CR1000.")
-device = connect_to_device()
+if __name__ == "__main__":
 
-print(f"Device time is currently {device.gettime()}.")
-try:
-    now = get_time_ntp()
-    print("Got time from NTP server.")
-except Exception as e:
-    print("Could not get time from NTP server. Error:")
-    print(e)
-    print("Using local device time.")
+    args = parser.parse_args() # get command line args
 
-    now = get_time_local()
+    print("Connecting to CR1000.")
+    device = connect_to_device(args.port)
 
-now = now.replace(tzinfo=None).replace(microsecond=0)
-device.settime(now)
-print(f"Set device time to {now} UTC.")
+    # attempt to get time from NTP server or locally
+    print(f"Device time is currently {device.gettime()}.")
+    try:
+        now = get_time_ntp()
+        print("Got time from NTP server.")
+    except Exception as e:
+        print("Could not get time from NTP server. Error:")
+        print(e)
+        print("Using local device time.")
+
+        now = get_time_local()
+
+    now = now.replace(tzinfo=None).replace(microsecond=0)
+    device.settime(now)
+    print(f"Set device time to {now} UTC.")
