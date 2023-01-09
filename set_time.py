@@ -22,7 +22,7 @@ def get_time_ntp() -> dt.datetime:
 
 """Get the current time from this computer"""
 def get_time_local() -> dt.datetime:
-    return dt.datetime.now()
+    return dt.datetime.now(dt.timezone.utc)
 
 def as_utc_str(time: dt.datetime) -> str:
     return time.replace(tzinfo=dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
@@ -35,14 +35,13 @@ if __name__ == "__main__":
     device = connect_to_device(args.port)
 
     # attempt to get time from NTP server or locally
-    print(f"Device time is currently {device.gettime()}.")
     try:
         now = get_time_ntp()
-        print("Got time from NTP server.")
+        print("Got time from NTP server in UTC.")
     except Exception as e:
         print("Could not get time from NTP server. Error:")
         print(e)
-        print("Using local device time.")
+        print("Using local device time in UTC.")
 
         now = get_time_local()
 
