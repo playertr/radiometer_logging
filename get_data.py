@@ -73,7 +73,7 @@ def process_path(path: PosixPath) -> None:
     # Read new data from the CR1000.
     output_path = Path("output") / (name + ".csv")
     try: # attempt to get the latest date from the CSV path
-        start_date = get_last_date(output_path)
+        start_date = get_last_date(output_path) + dt.timedelta(seconds=1)
     except:
         start_date = None
     data = dev.get_data('Radiation', start_date, None)
