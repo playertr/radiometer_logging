@@ -51,7 +51,7 @@ def get_last_date(csv_path: PosixPath) -> dt.datetime:
         data = pd.read_csv(csv_path)
         last_date = data['Datetime'].max()
     except Exception as e:
-        print(f"Potential CSV path {csv_path} does not contain a valid date.")
+        logger.info(f"Potential CSV path {csv_path} does not contain a valid date.")
         raise e
     return dt.datetime.strptime(last_date, "%Y-%m-%d %H:%M:%S")
 
@@ -71,7 +71,7 @@ def process_path(path: PosixPath) -> None:
         raise Exception(f"CR1000 time of {time} is too different from system time of {now}.")
 
     # Read new data from the CR1000.
-    output_path = name + ".csv"
+    output_path = Path("output") / (name + ".csv")
     try: # attempt to get the latest date from the CSV path
         start_date = get_last_date(output_path)
     except:
@@ -82,7 +82,7 @@ def process_path(path: PosixPath) -> None:
     # Write data from CR1000 to disk.
     if start_date == None:
         print(f"Creating a new CSV file named {output_path} with {len(data)} entries.")
-        df.to_csv(output_path, mode='a', header=False)
+        df.to_csv(output_path, mode='w', header=True)
     else:
         print(f"Appending to CSV file named {output_path} .")
         print(f"Got {len(data)} new entries since {start_date} .")
