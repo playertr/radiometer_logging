@@ -10,7 +10,7 @@ def connect_to_device(port : str = "/dev/ttyUSB0") -> CR1000:
 
     # use port=None to create a serial port object without opening the underlying port
     ser = serial.Serial(port=None, 
-        baudrate=115200,
+        baudrate=38400,
         timeout=2,
         bytesize=serial.EIGHTBITS,
         parity=serial.PARITY_NONE,
