@@ -4,3 +4,6 @@
 *.swp
 *.pyc
 *.log
+.vscode/
+dependency_links.txt
+*.egg-info
