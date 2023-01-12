@@ -3,3 +3,7 @@
 *.csv
 *.swp
 *.pyc
+
+.vscode/
+dependency_links.txt
+*.egg-info
