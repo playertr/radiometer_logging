@@ -21,8 +21,15 @@ for df in shackleton, klenova:
 
 # Make plots
 fig, axs = plt.subplots(2, 2, figsize=(10,5))
-lw_ylim = [420, 460]
-sw_ylim = [-10, 15]
+
+lw_ylim = [None, None]
+sw_ylim = [None, None]
+
+# If you want, you can uncomment the lines below to set the Y range.
+# lw_ylim = [420, 460]
+# sw_ylim = [-10, 15]
+
+# The variable below sets the X range.
 xlim = [shackleton.Datetime[0], None]
 
 lw_names = ['A_SL510_LWi_Avg', 'A_SL610_LWo_Avg', 'B_SL510_LWi_Avg',
