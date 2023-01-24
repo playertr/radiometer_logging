@@ -22,12 +22,9 @@ for df in shackleton, klenova:
 # Make plots
 fig, axs = plt.subplots(2, 2, figsize=(10,5))
 
-lw_ylim = [None, None]
-sw_ylim = [None, None]
-
-# If you want, you can uncomment the lines below to set the Y range.
-# lw_ylim = [420, 460]
-# sw_ylim = [-10, 15]
+# If you want, you can uncomment the set_ylim commands to set the Y range.
+lw_ylim = [420, 460]
+sw_ylim = [-10, 15]
 
 # The variable below sets the X range.
 xlim = [shackleton.Datetime[0], None]
@@ -37,21 +34,25 @@ lw_names = ['A_SL510_LWi_Avg', 'A_SL610_LWo_Avg', 'B_SL510_LWi_Avg',
 sw_names = ['A_SP510_SWi_Avg', 'A_SP610_SWo_Avg',
        'B_SP510_SWi_Avg', 'B_SP610_SWo_Avg']
 
+kwargs = dict(
+    alpha=0.5
+)
+
 # Shackleton longwave
 for name in lw_names:
     if name == "Datetime": continue
-    axs[0][0].plot(shackleton["Datetime"], shackleton[name], '.', label=name)
+    axs[0][0].plot(shackleton["Datetime"], shackleton[name], label=name, **kwargs)
     axs[0][0].set_xlim(*xlim)
-    axs[0][0].set_ylim(*lw_ylim)
+    # axs[0][0].set_ylim(*lw_ylim)
 axs[0][0].set_ylabel('LW Flux (W m$^{-2}$)')
 # axs[0][0].legend(bbox_to_anchor=(1.0, 1.0), loc='upper left')
 
 # Shackleton shortwave
 for name in sw_names:
     if name == "Datetime": continue
-    axs[1][0].plot(shackleton["Datetime"], shackleton[name], '.', label=name)
+    axs[1][0].plot(shackleton["Datetime"], shackleton[name], label=name, **kwargs)
     axs[1][0].set_xlim(*xlim)
-    axs[1][0].set_ylim(*sw_ylim)
+    # axs[1][0].set_ylim(*sw_ylim)
 axs[1][0].set_ylabel('SW Flux (W m$^{-2}$)')
 # axs[1][0].legend(bbox_to_anchor=(1.0, 1.0), loc='upper left')
 axs[1][0].set_xlabel('Time (UTC)')
@@ -61,18 +62,18 @@ axs[0][0].set_title('Shackleton')
 # Klenova longwave
 for name in lw_names:
     if name == "Datetime": continue
-    axs[0][1].plot(klenova["Datetime"], klenova[name], '.', label=name)
+    axs[0][1].plot(klenova["Datetime"], klenova[name], label=name, **kwargs)
     axs[0][1].set_xlim(*xlim)
-    axs[0][1].set_ylim(*lw_ylim)
+    # axs[0][1].set_ylim(*lw_ylim)
 # axs[0][1].set_ylabel('LW Flux (W m$^{-2}$)')
 axs[0][1].legend(bbox_to_anchor=(1.0, 1.0), loc='upper left')
 
 # Klenova shortwave
 for name in sw_names:
     if name == "Datetime": continue
-    axs[1][1].plot(klenova["Datetime"], klenova[name], '.', label=name)
+    axs[1][1].plot(klenova["Datetime"], klenova[name], label=name, **kwargs)
     axs[1][1].set_xlim(*xlim)
-    axs[1][1].set_ylim(*sw_ylim)
+    # axs[1][1].set_ylim(*sw_ylim)
 # axs[1][1].set_ylabel('SW Flux (W m$^{-2}$)')
 axs[1][1].legend(bbox_to_anchor=(1.0, 1.0), loc='upper left')
 axs[1][1].set_xlabel('Time (UTC)')
