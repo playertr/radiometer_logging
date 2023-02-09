@@ -19,6 +19,7 @@ logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 MAX_ALLOWABLE_TIME_DIFF = dt.timedelta(seconds=3) # seconds
+USE_UTC_TIME = True
 
 # a mapping from serial number to device name
 names = {
@@ -76,7 +77,9 @@ def process_path(path: PosixPath) -> None:
         start_date = get_last_date(output_path) + dt.timedelta(seconds=1)
     except:
         start_date = None
-    data = dev.get_data('Radiation', start_date, None)
+    
+    end_date = dt.datetime.now(tz=dt.UTC) if USE_UTC_TIME else None
+    data = dev.get_data('Radiation', start_date, end_date)
     df = pd.DataFrame(data)
 
     # Write data from CR1000 to disk.
