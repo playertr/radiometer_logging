@@ -78,7 +78,7 @@ def process_path(path: PosixPath) -> None:
     except:
         start_date = None
     
-    end_date = dt.datetime.now(tz=dt.UTC) if USE_UTC_TIME else None
+    end_date = dt.datetime.now(tz=dt.timezone.utc) if USE_UTC_TIME else None
     data = dev.get_data('Radiation', start_date, end_date)
     df = pd.DataFrame(data)
 
