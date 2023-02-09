@@ -86,5 +86,6 @@ fig.tight_layout()
 
 # ultra-high-resolution and vector style
 # for pretty papers
+plt.show()
 plt.savefig('output/figs/irradiance.png', dpi=600)
 plt.savefig('output/figs/irradiance.svg')
